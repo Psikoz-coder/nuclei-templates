@@ -2,7 +2,7 @@ id: crlf-injection-extended
 
 info:
   name: CRLF Injection Extended Detection
-  author: coffin
+  author: coffin, Psikoz
   severity: high
   description: Detects a wide range of CRLF injection vectors that can be exploited for header injection, response splitting, and XSS.
   reference:
@@ -49,7 +49,6 @@ http:
       - type: regex
         part: header
         regex:
-          - '(?i)(location\s*:\s*(http[s]?:)?//?www\.evil\.com)'
           - '(?i)(set-cookie\s*:\s*coffin\s*=\s*hi)'
           - '(?i)(coffin-x\s*:\s*coffin-x)'
       - type: status
@@ -61,6 +60,14 @@ http:
           - 205
           - 206
           - 207
+        condition: or
+      - type: regex
+        part: header
+        regex:
+          - '(?i)location\s*:\s*(http[s]?:)?//?www\.evil\.com'
+        condition: and
+      - type: status
+        status:
           - 301
           - 302
           - 307
